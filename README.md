@@ -21,7 +21,7 @@ This model is inspired by the following real world problem:
 - They want to minimize the sum of the distance they cover indivudally ($\overline{AM}+\overline{MC}$ for Alice and $\overline{BM}+\overline{MC}$).
 - They want their respective detour being percentually equal ($\frac{\overline{AM}+\overline{MC}}{\overline{AC}} = \frac{\overline{BM}+\overline{MC}}{\overline{BC}}$). We call this condition $\textit{fairness}$.
 
-In order to find a compromise between the two objective, we define $f$ as the ratio above.
+In order to find a compromise between the two objectives, we define $f$ as the ratio above.
 
 ## Example
 
