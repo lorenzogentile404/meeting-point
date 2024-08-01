@@ -14,6 +14,8 @@ $$C_1: \frac{\overline{AM}+\overline{MC}}{\overline{AC}} = \frac{\overline{BM}+\
 
 $$C_2: M \in △ABC$$
 
+## Real world application
+
 This model is inspired by the following real world problem:
 
 - Two friends Alice ($A$) and Bob ($B$) want to meet to go to the cinema ($C$).
@@ -23,7 +25,7 @@ This model is inspired by the following real world problem:
 
 In order to find a compromise between the two objectives, we define $f$ as the ratio above.
 
-## Example
+## Example of the usage
 
 In the figure below, we present an example of the usage of the proposed model. As a comparison, $G$ is the barycenter of the triangle. We observe that, while the value of $f$ is smaller in the case of $G$ with respect to the case of $M$, the $\textit{fairness}$ constraint involving the detours is not satisfied ($dA \neq dB$).
 
