@@ -2,11 +2,11 @@
 
 Given a triangle $△ABC$, we want to find a point $M$ such that:
 
-$$min(f) = min(\frac{\overline{AM}+\overline{BM}+2\overline{MC}}{\overline{XC}})$$
+$$min(f) = min(\frac{\overline{AM}+\overline{BM}+2\overline{MC}}{\overline{MC}})$$
 
 That this is equivalent to:
 
-$$min(f) = min(\frac{\overline{AM}+\overline{BM}}{\overline{XC}})$$
+$$min(f) = min(\frac{\overline{AM}+\overline{BM}}{\overline{MC}})$$
 
 Subject to the following constraints:
 
@@ -19,7 +19,7 @@ $$C_2: M \in △ABC$$
 This model is inspired by the following real world problem:
 
 - Two friends Alice ($A$) and Bob ($B$) want to meet to go to the cinema ($C$).
-- They want to maximize the covered distance together ($\overline{XC}$).
+- They want to maximize the covered distance together ($\overline{MC}$).
 - They want to minimize the sum of the distance they cover indivudally ($\overline{AM}+\overline{MC}$ for Alice and $\overline{BM}+\overline{MC}$).
 - They want their respective detour being percentually equal ($\frac{\overline{AM}+\overline{MC}}{\overline{AC}} = \frac{\overline{BM}+\overline{MC}}{\overline{BC}}$). We call this condition $\textit{fairness}$.
 
