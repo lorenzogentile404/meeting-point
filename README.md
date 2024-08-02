@@ -29,5 +29,5 @@ In order to find a compromise between the two objectives, we define $f$ as the r
 
 In the figure below, we present an example of the usage of the proposed model. As a comparison, $G$ is the barycenter of the triangle. We observe that, while the value of $f$ is smaller in the case of $G$ with respect to the case of $M$, the $\textit{fairness}$ constraint involving the detours is not satisfied ($dA \neq dB$).
 
-![meetingPoint](https://github.com/user-attachments/assets/c59dccf7-974e-49c3-9a30-8d4c3106a9fa)
+![meetingPoint](https://github.com/user-attachments/assets/d5209612-f917-4a1c-87ee-e2780ee2caa3)
 
