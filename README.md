@@ -20,7 +20,7 @@ This model is inspired by the following real world problem:
 
 - Two friends Alice ($A$) and Bob ($B$) want to meet to go to the cinema ($C$).
 - They want to maximize the covered distance together ($\overline{MC}$).
-- They want to minimize the sum of the distance they cover indivudally ($\overline{AM}+\overline{MC}$ for Alice and $\overline{BM}+\overline{MC}$).
+- They want to minimize the sum of the distance they cover individually ($\overline{AM}+\overline{MC}$ for Alice and $\overline{BM}+\overline{MC}$).
 - They want their respective detours being percentually equal ($\frac{\overline{AM}+\overline{MC}}{\overline{AC}} = \frac{\overline{BM}+\overline{MC}}{\overline{BC}}$). We call this condition $\textit{fairness}$.
 
 In order to find a compromise between the two objectives, we define $f$ as the ratio above.
