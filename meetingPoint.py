@@ -131,7 +131,7 @@ for x in np.arange(xMin, xMax, xGranularity):
 
 # Plot the candidate meeting points and the optimal point
 for M, f, percentageDetourA in mCandidates:
-    color = cm.viridis((f - fMin) / (fMax - fMin)) if fMax != fMin else "black"
+    color = cm.viridis((f - fMin) / (fMax - fMin) if fMax != fMin else 1)
     size = 20
     if M.equals(mOptimal):
         size = 100
