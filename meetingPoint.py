@@ -59,7 +59,7 @@ yMin = min(A.y, B.y, C.y)
 yMax = max(A.y, B.y, C.y)
 
 # Plot the triangle
-textShift = 0.4
+textShift = 1 / 2  # Adjust based on the plot
 fig, ax = plt.subplots()
 ax.scatter(A.x, A.y, color="red", s=100)
 ax.text(A.x, A.y - textShift, "A", color="red", fontsize=12)
@@ -76,14 +76,14 @@ G = compute_barycenter(A, B, C)
 ax.scatter(G.x, G.y, color="blue", s=100)
 ax.text(
     G.x,
-    G.y - 0.3,
+    G.y - textShift,
     "G(" + str(round(G.x, 3)) + "," + str(round(G.y, 3)) + ")",
     fontsize=10,
     color="blue",
 )
 ax.text(
-    G.x + 0.3,
-    G.y - 0.6,
+    G.x,
+    G.y - textShift * 3 / 2,
     "f: "
     + str(round(objectiveFunction(G, A, B), 3))
     + " dA: "
@@ -131,13 +131,13 @@ for x in np.arange(xMin, xMax, xGranularity):
 
 # Plot the candidate meeting points and the optimal point
 for M, f, percentageDetourA in mCandidates:
-    color = cm.viridis((f - fMin) / (fMax - fMin))
+    color = cm.viridis((f - fMin) / (fMax - fMin)) if fMax != fMin else "black"
     size = 20
     if M.equals(mOptimal):
         size = 100
         ax.text(
-            mOptimal.x,
-            mOptimal.y + 0.25,
+            mOptimal.x + textShift,
+            mOptimal.y,
             "M(" + str(round(mOptimal.x, 3)) + "," + str(round(mOptimal.y, 3)) + ")",
             fontsize=10,
             color=color,
@@ -145,7 +145,7 @@ for M, f, percentageDetourA in mCandidates:
     ax.scatter(M.x, M.y, color=color, s=size)
     ax.text(
         M.x + textShift,
-        M.y,
+        M.y - textShift / 2,
         "f: " + str(round(f, 3)) + " d: " + str(round(percentageDetourA, 3)),
         fontsize=10,
         color=color,
