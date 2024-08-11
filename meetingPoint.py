@@ -106,7 +106,6 @@ ax.text(
 xGranularity = (xMax - xMin) / 100
 yGranularity = (yMax - yMin) / 100
 cTollerance = min(xMax - xMin, yMax - yMin) / 1000
-print(xGranularity, yGranularity, cTollerance)
 
 fMin = sys.maxsize
 fMax = 0
