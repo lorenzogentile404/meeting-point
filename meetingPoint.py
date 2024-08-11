@@ -116,11 +116,10 @@ mOptimal = Point(0, 0)
 # Search for the optimal meeting point
 for x in np.arange(xMin, xMax, xGranularity):
     for y in np.arange(yMin, yMax, yGranularity):
-        print(x, y)
+        # Create candidate meeting point
+        M = Point(x, y)
         # Exclude the vertices
-        if not A.equals(C) and not B.equals(C):
-            # Create candidate meeting point
-            M = Point(x, y)
+        if not M.equals(A) and not M.equals(B) and not M.equals(C):
             # Compute the constraints
             cFairness, percentageDetourCandidate = isFair(M, A, B, C, cTollerance)
             cPointInTriangle = isPointInTriangle(M, A, B, C)
