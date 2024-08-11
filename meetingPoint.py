@@ -40,6 +40,13 @@ def isPointInTriangle(P, A, B, C):
     return area_ABC == area_PAB + area_PBC + area_PAC
 
 
+def isFair(M, A, B, C, cTollerance):
+    percentageDetourA = percentageDetour(M, A, C)
+    percentageDetourB = percentageDetour(M, B, C)
+    # The second returned value is meaningful only when the first is True
+    return abs(percentageDetourA - percentageDetourB) <= cTollerance, percentageDetourA
+
+
 def objectiveFunction(M, A, B):
     return (distance(A, M) + distance(B, M)) / distance(M, C)
 
@@ -115,14 +122,12 @@ for x in np.arange(xMin, xMax, xGranularity):
             # Create candidate meeting point
             M = Point(x, y)
             # Compute the constraints
-            percentageDetourA = percentageDetour(M, A, C)
-            percentageDetourB = percentageDetour(M, B, C)
-            cFairness = abs(percentageDetourA - percentageDetourB) <= cTollerance
+            cFairness, percentageDetourCandidate = isFair(M, A, B, C, cTollerance)
             cPointInTriangle = isPointInTriangle(M, A, B, C)
             if cFairness and cPointInTriangle:
                 # Evalute objective function
                 f = objectiveFunction(M, A, B)
-                mCandidates.append((M, f, percentageDetourA))
+                mCandidates.append((M, f, percentageDetourCandidate))
                 if f < fMin:
                     fMin = f
                     mOptimal = M
@@ -130,7 +135,9 @@ for x in np.arange(xMin, xMax, xGranularity):
                     fMax = f
 
 # Plot the candidate meeting points and the optimal point
-for M, f, percentageDetourA in mCandidates:
+for M, f, percentageDetourCandidate in mCandidates:
+    # Compute the color based on the objective function value
+    # The darker the color, the better (smaller) is the objective function value
     color = cm.viridis((f - fMin) / (fMax - fMin) if fMax != fMin else 1)
     size = 20
     if M.equals(mOptimal):
@@ -146,7 +153,7 @@ for M, f, percentageDetourA in mCandidates:
     ax.text(
         M.x + textShift,
         M.y - textShift / 2,
-        "f: " + str(round(f, 3)) + " d: " + str(round(percentageDetourA, 3)),
+        "f: " + str(round(f, 3)) + " d: " + str(round(percentageDetourCandidate, 3)),
         fontsize=10,
         color=color,
     )
