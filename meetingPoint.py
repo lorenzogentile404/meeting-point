@@ -5,14 +5,14 @@ import matplotlib.cm as cm
 import sys
 
 
-# Support classes and funcionts
+# Support classes and functions
 class Point:
     def __init__(self, x, y):
         self.x = x
         self.y = y
 
-    def equals(self, P):
-        return self.x == P.x and self.y == P.y
+    def equals(self, P, eps=1e-5):
+        return math.isclose(self.x, P.x, abs_tol=eps) and math.isclose(self.y, P.y, abs_tol=eps)
 
 
 def distance(P1, P2):
@@ -24,31 +24,34 @@ def area(P1, P2, P3):
     b = distance(P2, P3)
     c = distance(P3, P1)
     s = (a + b + c) / 2
-    s * (s - a) * (s - b) * (s - c)
     return math.sqrt(max(s * (s - a) * (s - b) * (s - c), 0))
 
 
-def compute_barycenter(P1, P2, P3):
+def computeBarycenter(P1, P2, P3):
     return Point((P1.x + P2.x + P3.x) / 3, (P1.y + P2.y + P3.y) / 3)
 
 
 def isPointInTriangle(P, A, B, C):
-    area_ABC = area(A, B, C)
-    area_PAB = area(P, A, B)
-    area_PBC = area(P, B, C)
-    area_PAC = area(P, A, C)
-    return area_ABC == area_PAB + area_PBC + area_PAC
+    areaABC = area(A, B, C)
+    areaPAB = area(P, A, B)
+    areaPBC = area(P, B, C)
+    areaPAC = area(P, A, C)  
+    epsArea = areaABC * 1e-5
+    return abs(areaABC - (areaPAB + areaPBC + areaPAC)) <= epsArea
 
-
-def isFair(M, A, B, C, cTollerance):
+def isFair(M, A, B, C):
     percentageDetourA = percentageDetour(M, A, C)
     percentageDetourB = percentageDetour(M, B, C)
+    epsFairness = 0.005
     # The second returned value is meaningful only when the first is True
-    return abs(percentageDetourA - percentageDetourB) <= cTollerance, percentageDetourA
+    return abs(percentageDetourA - percentageDetourB) <= epsFairness, percentageDetourA
 
 
 def objectiveFunction(M, A, B):
-    return (distance(A, M) + distance(B, M)) / distance(M, C)
+    distanceMC = distance(M, C)
+    if math.isclose(distanceMC, 0, abs_tol=1e-6):
+        return sys.maxsize
+    return (distance(A, M) + distance(B, M)) / distanceMC
 
 
 def percentageDetour(M, P, C):
@@ -79,7 +82,7 @@ ax.plot([B.x, C.x], [B.y, C.y], "black")
 ax.plot([C.x, A.x], [C.y, A.y], "black")
 
 # Plot the barycenter
-G = compute_barycenter(A, B, C)
+G = computeBarycenter(A, B, C)
 ax.scatter(G.x, G.y, color="blue", s=100)
 ax.text(
     G.x,
@@ -105,7 +108,6 @@ ax.text(
 # Define the granularity of the search
 xGranularity = (xMax - xMin) / 100
 yGranularity = (yMax - yMin) / 100
-cTollerance = min(xMax - xMin, yMax - yMin) / 1000
 
 fMin = sys.maxsize
 fMax = 0
@@ -120,7 +122,7 @@ for x in np.arange(xMin, xMax, xGranularity):
         # Exclude the vertices
         if not M.equals(A) and not M.equals(B) and not M.equals(C):
             # Compute the constraints
-            cFairness, percentageDetourCandidate = isFair(M, A, B, C, cTollerance)
+            cFairness, percentageDetourCandidate = isFair(M, A, B, C)
             cPointInTriangle = isPointInTriangle(M, A, B, C)
             if cFairness and cPointInTriangle:
                 # Evalute objective function
@@ -133,7 +135,8 @@ for x in np.arange(xMin, xMax, xGranularity):
                     fMax = f
 
 # Plot the candidate meeting points and the optimal point
-for M, f, percentageDetourCandidate in mCandidates:
+# i is a counter for plot readability 
+for i, (M, f, percentageDetourCandidate) in enumerate(mCandidates):
     # Compute the color based on the objective function value
     # The darker the color, the better (smaller) is the objective function value
     color = cm.viridis((f - fMin) / (fMax - fMin) if fMax != fMin else 1)
@@ -148,13 +151,14 @@ for M, f, percentageDetourCandidate in mCandidates:
             color=color,
         )
     ax.scatter(M.x, M.y, color=color, s=size)
-    ax.text(
-        M.x + textShift,
-        M.y - textShift / 2,
-        "f: " + str(round(f, 3)) + " d: " + str(round(percentageDetourCandidate, 3)),
-        fontsize=10,
-        color=color,
-    )
+    if M.equals(mOptimal) or i % 5 == 0: # Print extensive info for M or every 5 candidate meeting points
+        ax.text(
+            M.x + textShift,
+            M.y - textShift / 2,
+            "f: " + str(round(f, 3)) + " d: " + str(round(percentageDetourCandidate, 3)),
+            fontsize=10,
+            color=color,
+        )
 
 # Set the aspect ratio to be equal
 ax.set_aspect("equal")
@@ -165,5 +169,5 @@ plt.ylabel("Y-axis")
 plt.title("Optimal meeting point M")
 
 # Display the plot
-plt.grid(True)  # Add a grid for better readability
+plt.grid(True) # Add a grid for better readability
 plt.show()
